@@ -25,3 +25,17 @@ myapp:
 
 **importValuesFrom** - is a keyword for list with sources for Values to render it
 
+## Notes
+
+go template [Actions](https://pkg.go.dev/text/template#hdr-Actions) could be used but yaml should we readable for yaml-parsers. So easest way to do it is using comment befor actions "#" 
+like this:
+```
+myapp:
+# {{ if .Values.istio }}
+  virtualService: {{ .Values.hostname }}
+# {{ else }}
+  ingress: {{ .Values.hostname }}
+# {{end }}
+```
+
+Don't use helm function for trim sapces "{{-" or "-}}" - it isn't implemented
