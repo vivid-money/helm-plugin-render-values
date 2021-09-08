@@ -1,0 +1,9 @@
+name: "helm-render-values"
+version: "0.1.1"
+ignoreFlags: false
+description: |-
+  Render value-file as template and use it.
+downloaders:
+- command: "render-values"
+  protocols:
+    - "render"

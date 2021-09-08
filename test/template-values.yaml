@@ -1,0 +1,13 @@
+importValuesFrom: 
+- base-values1.yaml
+- base-values2.yaml
+
+myapp:
+  cluster: {{ .Values.clusterName }}
+  enabled: {{ .Values.enabled }}
+  controller:
+    autoscaling:
+      enabled: true
+      minReplicas: {{ .Values.defaults.minReplicas }}
+
+    resources: {{ toYaml .Values.defaults.resources | nindent 6 }}
