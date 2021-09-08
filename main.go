@@ -52,14 +52,22 @@ func readFile(file string) []byte {
 
 // Get file list from importValuesFrom
 func GetValuesFiles(file string) ImportValues {
-	yamlFiles := readFile(file)
+	rawFile := readFile(file)
+	yamlFiles := strings.ReplaceAll(string(rawFile), "{{", "#{{")
 	data := ImportValues{}
-	err := yaml.Unmarshal(yamlFiles, &data)
+	err := yaml.Unmarshal([]byte(yamlFiles), &data)
 	if err != nil {
 		errLog.Fatalf("Error GetValuesFiles: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
 	}
 	if len(data.ImportValues) < 1 {
 		println("There is no import values.")
+	} else {
+		for i, source := range data.ImportValues {
+			if source == "self" {
+				data.ImportValues[i] = filepath.Base(file)
+				println("There is itself using for values.")
+			}
+		}
 	}
 	return data
 }
@@ -68,7 +76,8 @@ func GetValuesFiles(file string) ImportValues {
 func ReadValues(valuesFiles ImportValues, dir string) (vals Values) {
 	vals = make(map[string]interface{})
 	for _, file := range valuesFiles.ImportValues {
-		yamlFiles := readFile(filepath.Join(dir, file))
+		rawFile := readFile(filepath.Join(dir, file))
+		yamlFiles := strings.ReplaceAll(string(rawFile), "{{", "#{{")
 		data := make(map[string]interface{})
 		err := yaml.Unmarshal([]byte(yamlFiles), &data)
 		if err != nil {
