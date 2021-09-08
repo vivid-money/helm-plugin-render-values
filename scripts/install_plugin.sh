@@ -21,7 +21,6 @@ fi
 
 echo $url
 
-mkdir -p "bin"
 mkdir -p "releases/v${version}"
 
 # Download with curl if possible.
@@ -31,5 +30,5 @@ else
     wget -q "${url}" -O "releases/v${version}.tar.gz"
 fi
 tar xzf "releases/v${version}.tar.gz" -C "releases/v${version}"
-mv "releases/v${version}/bin/render-values" "bin/render-values" || \
-    mv "releases/v${version}/bin/render-values.exe" "bin/render-values"
+mv "releases/v${version}/render-values" "render-values" || \
+    mv "releases/v${version}/render-values.exe" "render-values"

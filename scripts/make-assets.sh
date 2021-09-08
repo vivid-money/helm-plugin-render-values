@@ -1,24 +1,19 @@
 #!/bin/bash
+set -x
 
-VERSION="0.1.1"
+VERSION="v0.1.2"
 mkdir -p assets
 
-# MACOS
-mkdir assets/helm-plugin-render-values_${VERSION}_darwin_amd64
-cp plugin.yaml LICENSE assets/helm-plugin-render-values_${VERSION}_darwin_amd64/
-env GOOS=darwin go build -o assets/helm-plugin-render-values_${VERSION}_darwin_amd64/render-values .
+OS_LIST="darwin
+linux
+windows
+"
 
-# LINUX
-mkdir assets/helm-plugin-render-values_${VERSION}_linux_amd64
-cp plugin.yaml LICENSE assets/helm-plugin-render-values_${VERSION}_linux_amd64/
-env GOOS=linux go build -o assets/helm-plugin-render-values_${VERSION}_linux_amd64/render-values .
+mkdir assets/plugin
+cp plugin.yaml LICENSE assets/plugin/
 
-# LINUX
-mkdir assets/helm-plugin-render-values_${VERSION}_windows_amd64
-cp plugin.yaml LICENSE assets/helm-plugin-render-values_${VERSION}_windows_amd64/
-env GOOS=windows go build -o assets/helm-plugin-render-values_${VERSION}_windows_amd64/render-values .
-
-cd assets
-tar -czf helm-plugin-render-values_${VERSION}_linux_amd64.tar.gz helm-plugin-render-values_${VERSION}_linux_amd64
-tar -czf helm-plugin-render-values_${VERSION}_darwin_amd64.tar.gz helm-plugin-render-values_${VERSION}_darwin_amd64
-tar -czf helm-plugin-render-values_${VERSION}_windows_amd64.tar.gz helm-plugin-render-values_${VERSION}_windows_amd64
+for OS in $(echo $OS_LIST)
+do
+	env GOOS=${OS} go build -o assets/plugin/render-values .
+	tar -czf assets/helm-plugin-render-values_${VERSION}_${OS}_amd64.tar.gz -C assets/plugin .
+done
