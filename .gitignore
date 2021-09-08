@@ -2,3 +2,4 @@ vendor
 .vscode
 assets
 .DS_Store
+render-values

@@ -56,7 +56,7 @@ func GetValuesFiles(file string) ImportValues {
 	data := ImportValues{}
 	err := yaml.Unmarshal(yamlFiles, &data)
 	if err != nil {
-		errLog.Fatalf("Error: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
+		errLog.Fatalf("Error GetValuesFiles: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
 	}
 	if len(data.ImportValues) < 1 {
 		println("There is no import values.")
@@ -72,7 +72,7 @@ func ReadValues(valuesFiles ImportValues, dir string) (vals Values) {
 		data := make(map[string]interface{})
 		err := yaml.Unmarshal([]byte(yamlFiles), &data)
 		if err != nil {
-			errLog.Fatalf("Error: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
+			errLog.Fatalf("Error ReadValues: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
 		}
 		mergeKeys(vals, data)
 	}
@@ -100,7 +100,7 @@ func RenderTemplate(templatefile string, data Values) {
 	tpl, err := template.New(filepath.Base(templatefile)).Funcs(funcMap()).ParseFiles(templatefile)
 
 	if err != nil {
-		errLog.Fatalf("Error: Can't parse file: \"%s\"; stack:\"%v\"}", templatefile, err)
+		errLog.Fatalf("Error RenderTemplate: Can't parse file: \"%s\"; stack:\"%v\"}", templatefile, err)
 	}
 
 	var buf strings.Builder
@@ -110,7 +110,7 @@ func RenderTemplate(templatefile string, data Values) {
 	}
 	rendered := strings.ReplaceAll(buf.String(), "<no value>", "")
 	if *debugMode {
-		println("Values:\n---\n", rendered, "---")
+		println(rendered, "---")
 	}
 
 	fmt.Println(rendered)

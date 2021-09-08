@@ -10,7 +10,7 @@ $ helm plugin install https://github.com/vivid-money/helm-plugin-render-values -
 
 ## Usage
 ```
-upgrade name . -f render://templated-values.yaml
+helm upgrade name . -f render://templated-values.yaml
 ```
 templated-values.yaml should looks like this
 ```
