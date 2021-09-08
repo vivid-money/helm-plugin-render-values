@@ -1,3 +1,4 @@
 vendor
 .vscode
 assets
+.DS_Store
