@@ -5,7 +5,7 @@ The Helm downloader plugin with rendering templated values files
 ## Install
 Use helm CLI to install this plugin:
 ```
-$ helm plugin install https://github.com/vivid-money/helm-plugin-render-values --version 0.1.2
+$ helm plugin install https://github.com/vivid-money/helm-plugin-render-values --version 0.1.3
 ```
 
 ## Usage
