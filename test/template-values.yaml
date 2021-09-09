@@ -1,9 +1,9 @@
 importValuesFrom: 
+- self
 - base-values1.yaml
 - base-values2.yaml
-- self
 
-default: qwerty
+default: from_this
 myapp:
   cluster: {{ .Values.clusterName }}
   enabled: {{ .Values.enabled }}
@@ -13,6 +13,6 @@ myapp:
       minReplicas: {{ .Values.defaults.minReplicas }}
       {{- if .Values.default }}
       run: {{  .Values.default }}
-      {{- end -}}
+      {{- end }}
 
     resources: {{ toYaml .Values.defaults.resources | nindent 6 }}

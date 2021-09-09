@@ -31,7 +31,7 @@ v0.1.3
 - fixed all from previous(0.1.2) note
 - could use "self" in importValuesFrom
 
-v0.1.2
+v0.1.2 (not actual)
 - go template [Actions](https://pkg.go.dev/text/template#hdr-Actions) could be used but yaml should we readable for yaml-parsers. So easest way to do it is using comment befor actions "#" 
 like this:
 ```

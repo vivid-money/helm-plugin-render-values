@@ -1,2 +1,3 @@
 enabled: true
 clusterName: aws-eu-test-42
+default: from_base

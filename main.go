@@ -96,7 +96,11 @@ func ReadValues(valuesFiles ImportValues, dir string) (vals Values) {
 func mergeKeys(left, right Values) Values {
 	for key, rightVal := range right {
 		if leftVal, present := left[key]; present {
-			left[key] = mergeKeys(leftVal.(Values), rightVal.(Values))
+			if _, ok := leftVal.(Values); ok {
+				left[key] = mergeKeys(leftVal.(Values), rightVal.(Values))
+			} else {
+				left[key] = rightVal
+			}
 		} else {
 			left[key] = rightVal
 		}
