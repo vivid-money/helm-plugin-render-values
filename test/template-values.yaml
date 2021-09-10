@@ -3,7 +3,11 @@ importValuesFrom:
 - base-values1.yaml
 - base-values2.yaml
 
+extendRenderWith:
+- extended-values1.yaml
+
 default: from_this
+testint: 1
 myapp:
   cluster: {{ .Values.clusterName }}
   enabled: {{ .Values.enabled }}
