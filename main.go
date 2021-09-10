@@ -22,7 +22,7 @@ const (
 	argPrefix = "render://"
 )
 
-type Values map[string]interface{}
+type Values map[interface{}]interface{}
 
 type FilesList struct {
 	ImportValues []string `yaml:"importValuesFrom"`
@@ -57,7 +57,23 @@ func readFile(file string) []byte {
 	return data
 }
 
-// Get file list from importValuesFrom
+// Recursively merge right Values into left one
+func mergeKeys(left, right Values) Values {
+	for key, rightVal := range right {
+		if leftVal, present := left[key]; present {
+			if _, ok := leftVal.(Values); ok {
+				left[key] = mergeKeys(leftVal.(Values), rightVal.(Values))
+			} else {
+				left[key] = rightVal
+			}
+		} else {
+			left[key] = rightVal
+		}
+	}
+	return left
+}
+
+// Get file list from importValuesFrom/extendRenderWith
 func (vr *ValuesRenderer) GetFileList() error {
 	dir := filepath.Dir(vr.filename)
 	rawFile := readFile(vr.filename)
@@ -101,6 +117,7 @@ func (vr *ValuesRenderer) ReadValues() {
 	for _, file := range vr.files.ImportValues {
 		rawFile := readFile(file)
 		yamlFiles := strings.ReplaceAll(string(rawFile), "{{", "#{{")
+
 		data := make(Values)
 		err := yaml.Unmarshal([]byte(yamlFiles), &data)
 		if err != nil {
@@ -115,22 +132,6 @@ func (vr *ValuesRenderer) ReadValues() {
 	vr.values["Values"] = vals
 }
 
-// Recursively merge right Values into left one
-func mergeKeys(left, right Values) Values {
-	for key, rightVal := range right {
-		if leftVal, present := left[key]; present {
-			if _, ok := leftVal.(Values); ok {
-				left[key] = mergeKeys(leftVal.(Values), rightVal.(Values))
-			} else {
-				left[key] = rightVal
-			}
-		} else {
-			left[key] = rightVal
-		}
-	}
-	return left
-}
-
 // Render template to stdout
 func (vr *ValuesRenderer) RenderTemplate() {
 	valuesResult := make(Values)
@@ -138,17 +139,18 @@ func (vr *ValuesRenderer) RenderTemplate() {
 		tpl, err := template.New("render").Funcs(funcMap()).ParseFiles(file)
 
 		if err != nil {
-			errLog.Fatalf("Error create render: stack:\"%v\"}", err)
+			errLog.Fatalf("Error create render: %v}", err)
 		}
-
+		tpl.Option("missingkey=error")
 		var buf strings.Builder
 
 		err = tpl.ExecuteTemplate(&buf, filepath.Base(file), vr.values)
 		if err != nil {
-			errLog.Fatalf("Error: Can't render template: \"%s\"; stack:\"%v\"}", file, err)
+			errLog.Fatalf("Error: Can't render template: %v }", err)
 		}
 		rendered := strings.ReplaceAll(buf.String(), "<no value>", "")
 
+		// merge output in a single YAML
 		data := make(Values)
 		err = yaml.Unmarshal([]byte(rendered), &data)
 		if err != nil {
@@ -159,10 +161,10 @@ func (vr *ValuesRenderer) RenderTemplate() {
 	}
 	renderedValues, err := yaml.Marshal(valuesResult)
 	if err != nil {
-		log.Fatalf("Error: Can't execute toYAML func:\"%v\"\n   \"%s\"", err, valuesResult)
+		log.Fatalf("Error: Can't  marshal YAML :\"%v\"\n  \"%s\"", err, valuesResult)
 	}
 	if *debugMode {
-		println("Debug: rendered ##", renderedValues, "\n---")
+		println("Debug: rendered ##\n", string(renderedValues), "###\n")
 	}
 
 	fmt.Println(string(renderedValues))
