@@ -33,7 +33,7 @@ look an example in a "test" dir
 ## Notes
 
 v0.2.0
-- add "extendRenderWith" key to include that files to output render
+- add "extendRenderWith" key to include those files to output render
 - fix mergeKeys func
 
 v0.1.3
