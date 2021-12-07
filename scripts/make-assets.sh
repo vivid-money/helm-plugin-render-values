@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -x
 
-VERSION="0.2.0"
+VERSION="0.2.1"
 mkdir -p assets
 
 OS_LIST="darwin

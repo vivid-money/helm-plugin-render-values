@@ -17,6 +17,8 @@ templated-values.yaml should looks like this
 importValuesFrom: 
 - base-values1.yaml
 - base-values2.yaml
+- services/*/deploy.yaml
+- services/*/env/dev.yaml
 
 extendRenderWith:
 - extended-values1.yaml
@@ -26,11 +28,19 @@ myapp:
   enabled: {{ .Values.enabled }}
 ```
 
+if you use importValuesFrom with a pattern, then the value will be nested in "folder1"."folder2": (values in files)
+
+the values in importValuesFrom will be merged
+and the last one will override the first one if they have the same key
+
 look an example in a "test" dir
 
 **importValuesFrom** - is a keyword for list with sources for Values to render it
 
 ## Notes
+
+v0.2.1
+- importValuesFrom now can been set with files pattern
 
 v0.2.0
 - add "extendRenderWith" key to include those files to output render
