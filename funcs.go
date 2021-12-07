@@ -17,8 +17,9 @@ func funcMap() template.FuncMap {
 	delete(f, "expandenv")
 
 	extra := template.FuncMap{
-		"toYaml": toYAML,
-		"toJson": toJSON,
+		"toYaml":   toYAML,
+		"toJson":   toJSON,
+		"fromYaml": fromYAML,
 
 		// functions are not implemented and I don't want to
 		"include":  func(string, interface{}) string { return "not implemented" },
@@ -47,4 +48,13 @@ func toJSON(v interface{}) string {
 		log.Fatalf("Error: Can't execute toJSON func:\"%v\"\n   \"%s\"", err, v)
 	}
 	return string(data)
+}
+
+func fromYAML(str string) map[string]interface{} {
+	m := map[string]interface{}{}
+
+	if err := yaml.Unmarshal([]byte(str), &m); err != nil {
+		m["Error"] = err.Error()
+	}
+	return m
 }

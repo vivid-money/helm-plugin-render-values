@@ -8,6 +8,7 @@ extendRenderWith:
 
 default: from_this
 testint: 1
+template: '{{ / template $expr }}'
 myapp:
   cluster: {{ .Values.clusterName }}
   enabled: {{ .Values.enabled }}

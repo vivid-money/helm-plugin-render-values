@@ -4,7 +4,7 @@ ignoreFlags: false
 description: |-
   Render value-file as a template and use it.
 downloaders:
-- command: "render-values"
+- command: "render-values -debug"
   protocols:
     - "render"
 

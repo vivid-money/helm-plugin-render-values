@@ -109,19 +109,55 @@ func (vr *ValuesRenderer) GetFileList() error {
 	return err
 }
 
+func Dir2map(dir []string, val Values) Values {
+	data := make(Values)
+	if len(dir) > 1 {
+		data[dir[0]] = Dir2map(dir[1:], val)
+	} else {
+		data[dir[0]] = val
+	}
+	return data
+}
+
+func ReadMatch(pattern string) Values {
+	data := make(Values)
+	matches, _ := filepath.Glob(pattern)
+
+	for _, file := range matches {
+
+		dir := strings.Split(filepath.Dir(file), "/")
+		fileValue := make(Values)
+
+		rawFile := readFile(file)
+		err := yaml.Unmarshal(rawFile, &fileValue)
+		if err != nil {
+			errLog.Fatalf("Error ReadValues: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
+		}
+		mergeKeys(data, Dir2map(dir, fileValue))
+	}
+	return data
+}
+
 // Read values from files
 func (vr *ValuesRenderer) ReadValues() {
 
 	vals := make(Values)
 
 	for _, file := range vr.files.ImportValues {
-		rawFile := readFile(file)
-		yamlFiles := strings.ReplaceAll(string(rawFile), "{{", "#{{")
+		var rawFile []byte
+		var data Values
 
-		data := make(Values)
-		err := yaml.Unmarshal([]byte(yamlFiles), &data)
-		if err != nil {
-			errLog.Fatalf("Error ReadValues: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
+		if strings.Contains(file, "*") {
+			println("Read files with mask")
+			data = ReadMatch(file)
+		} else {
+			rawFile = readFile(file)
+
+			yamlFiles := strings.ReplaceAll(string(rawFile), "{{", "#{{")
+			err := yaml.Unmarshal([]byte(yamlFiles), &data)
+			if err != nil {
+				errLog.Fatalf("Error ReadValues: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
+			}
 		}
 		mergeKeys(vals, data)
 	}
@@ -129,6 +165,9 @@ func (vr *ValuesRenderer) ReadValues() {
 		vals = Values{}
 	}
 	vr.values = make(Values)
+
+	// errLog.Fatalf("RESULT %v\n", vals)
+
 	vr.values["Values"] = vals
 }
 
