@@ -1,4 +1,5 @@
 #!/bin/sh -e
+set -xe
 
 # Copied w/ love from the excellent hypnoglow/helm-s3
 
@@ -10,13 +11,23 @@ fi
 version="$(cat plugin.yaml | grep "version" | cut -d '"' -f 2)"
 echo "Downloading and installing helm-push v${version} ..."
 
+arch=""
 url=""
-if [ "$(uname)" = "Darwin" ]; then
-    url="https://github.com/vivid-money/helm-plugin-render-values/releases/download/v${version}/helm-plugin-render-values_${version}_darwin_amd64.tar.gz"
-elif [ "$(uname)" = "Linux" ] ; then
-    url="https://github.com/vivid-money/helm-plugin-render-values/releases/download/v${version}/helm-plugin-render-values_${version}_linux_amd64.tar.gz"
+if [ "$(arch)" = "aarch64" ]; then
+    arch="arm64"
+elif [ "$(arch)" = "arm" ] ; then
+    arch="arm64"
 else
-    url="https://github.com/vivid-money/helm-plugin-render-values/releases/download/v${version}/helm-plugin-render-values_${version}_windows_amd64.tar.gz"
+    arch="amd64"
+fi
+
+
+if [ "$(uname)" = "Darwin" ]; then
+    url="https://github.com/vivid-money/helm-plugin-render-values/releases/download/v${version}/helm-plugin-render-values_${version}_darwin_${arch}.tar.gz"
+elif [ "$(uname)" = "Linux" ] ; then
+    url="https://github.com/vivid-money/helm-plugin-render-values/releases/download/v${version}/helm-plugin-render-values_${version}_linux_${arch}.tar.gz"
+else
+    url="https://github.com/vivid-money/helm-plugin-render-values/releases/download/v${version}/helm-plugin-render-values_${version}_windows_${arch}.tar.gz"
 fi
 
 echo $url
