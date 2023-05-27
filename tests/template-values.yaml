@@ -1,0 +1,23 @@
+importValuesFrom: 
+- self
+- base-values1.yaml
+- base-values2.yaml
+
+extendRenderWith:
+- extended-values1.yaml
+
+default: from_this
+testint: 1
+template: '{\{ template $expr }}'
+myapp:
+  cluster: {{ .Values.clusterName }}
+  enabled: {{ .Values.enabled }}
+  controller:
+    autoscaling:
+      enabled: true
+      minReplicas: {{ .Values.defaults.minReplicas }}
+      {{- if .Values.default }}
+      run: {{ .Values.default }}
+      {{- end }}
+
+    resources: {{ toYaml .Values.defaults.resources | nindent 6 }}

@@ -1,0 +1,12 @@
+myapp:
+  clusterExt: {{ .Values.clusterName }}
+  controllerExt:
+    autoscaling:
+      enabled: true
+      minReplicas: {{ .Values.defaults.minReplicas }}
+      {{- if .Values.default }}
+      run: {{ .Values.default }}
+      {{- end }}
+
+    resources: {{ toYaml .Values.defaults.resources | nindent 6 }}
+---
