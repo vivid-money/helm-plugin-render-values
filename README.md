@@ -48,9 +48,20 @@ myapp:
 ### Self values rendering
 If neither `importValuesFrom` nor `extendRenderWith` is specified in the file, the values will be taken from the same file, and the file itself will be used for template rendering.
 
-Since this file renders values based on its own values, templating will only work with a single level of nesting. For example, if we define param1: value1, we can use it for param2: {{ .Values.param1 }}, but we cannot use param2 to generate the next value.
+- Since this file renders values based on its own values, templating will only work with a single level of nesting. For example, if we define param1: value1, we can use it for param2: {{ .Values.param1 }}, but we cannot use param2 to generate the next value.
 
-Another limitation is that you cannot use string values with `{{ xxx }}` in the main file that should not be rendered (e.g., passing strings with templating for Prometheus rules).
+- The plugin doesn't know about `.Release` values!
+
+- Another limitation is that you cannot use string values with `{{ xxx }}` in the main file that should not be rendered (e.g., passing strings with templating for Prometheus rules).
+
+Example:
+
+`helm upgrade releasename -f render://test-values.yaml`
+```test-values.yaml
+env: dev
+namespace: release-{{.Value.env}}
+hostname: service-{{.Value.env}}.domain.com
+```
 ## Notes
 
 v0.2.2
