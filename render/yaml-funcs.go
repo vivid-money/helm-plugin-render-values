@@ -1,5 +1,5 @@
 // There are some functions like in helm
-package main
+package render
 
 import (
 	"encoding/json"

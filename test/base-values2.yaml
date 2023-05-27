@@ -1,6 +1,0 @@
-enabled: true
-clusterName: aws-eu-test-42
-default: from_base
-defaults:
-  minReplicas: 3
-testint: 2

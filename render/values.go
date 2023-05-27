@@ -1,12 +1,18 @@
-package main
+package render
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
 
 	"gopkg.in/yaml.v2"
+)
+
+var (
+	errLog log.Logger
 )
 
 type Values map[interface{}]interface{}
@@ -20,13 +26,20 @@ type ValuesRenderer struct {
 	filename string
 	files    Files
 	values   Values
+	Debug    bool
+}
+
+func (vr *ValuesRenderer) Debuging(format string, v ...any) {
+	if vr.Debug {
+		errLog.Printf(format, v...)
+	}
 }
 
 // Create new render.
 func (vr *ValuesRenderer) Run(filename, argPrefix string) {
-	if *debugMode {
-		errLog.Printf("DEBUG: filename: %s", string(filename))
-	}
+	errLog.SetOutput(os.Stderr)
+	vr.Debuging("DEBUG: filename: %s", string(filename))
+
 	vr.filename = strings.TrimPrefix(filename, argPrefix)
 
 	if err := vr.GetFiles(); err != nil {
@@ -77,9 +90,7 @@ func (vr *ValuesRenderer) GetFiles() error {
 	extraFiles.ExtendRender = append(extraFiles.ExtendRender, vr.filename)
 	vr.files = extraFiles
 
-	if *debugMode {
-		errLog.Printf("DEBUG: %v\n", dmsgs)
-	}
+	vr.Debuging("DEBUG: %v\n", dmsgs)
 	return err
 }
 
@@ -113,9 +124,7 @@ func (vr *ValuesRenderer) ReadValues() error {
 	}
 	vr.values = make(Values)
 
-	if *debugMode {
-		errLog.Printf("DEBUG: total values: %#v\n", vals)
-	}
+	vr.Debuging("DEBUG: total values: %#v\n", vals)
 	vr.values["Values"] = vals
 	return nil
 }
@@ -146,7 +155,7 @@ func ParseYamlGlogFile(pattern string) Values {
 // Render Values template to a stdout.
 func (vr *ValuesRenderer) RenderTemplate() error {
 
-	var valuesResult Values
+	valuesResult := make(Values)
 	for _, file := range vr.files.ExtendRender {
 		var data Values
 		var buf strings.Builder
@@ -171,9 +180,7 @@ func (vr *ValuesRenderer) RenderTemplate() error {
 		mergeKeys(valuesResult, data)
 	}
 	renderedValues, err := yaml.Marshal(valuesResult)
-	if *debugMode {
-		errLog.Printf("DEBUG: rendered: %#v", string(renderedValues))
-	}
+	vr.Debuging("DEBUG: rendered: %#v", string(renderedValues))
 	if err != nil {
 		return fmt.Errorf("can't marshal yaml: \"%#v\"; stack:\"%v\"", valuesResult, err)
 	}
