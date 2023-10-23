@@ -100,7 +100,7 @@ func (vr *ValuesRenderer) ReadValues() error {
 	vals := make(Values)
 
 	for _, file := range vr.files.ImportValues {
-		fmt.Println(file)
+		vr.Debuging("DEBUG: read values from file: %#v\n", file)
 		var rawFile []byte
 		var data Values
 
@@ -138,7 +138,6 @@ func ParseYamlGlogFile(pattern string) Values {
 		errLog.Fatalf("ERROR: wrong glob: \"%s\"; stack:\"%v\"", pattern, err)
 	}
 	for _, file := range matches {
-        fmt.Println(file)
 		dir := strings.Split(filepath.Dir(file), "/")
 		fileValue := make(Values)
 

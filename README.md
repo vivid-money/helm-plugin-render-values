@@ -9,7 +9,7 @@ Feel free to explore the capabilities of this plugin and enjoy a more streamline
 ## Install
 Use helm CLI to install this plugin:
 ```
-$ helm plugin install https://github.com/vivid-money/helm-plugin-render-values --version 0.2.2
+$ helm plugin install https://github.com/vivid-money/helm-plugin-render-values --version 0.2.3
 ```
 
 ## Usage
