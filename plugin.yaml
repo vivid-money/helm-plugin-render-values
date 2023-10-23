@@ -1,5 +1,5 @@
 name: "helm-render-values"
-version: "0.2.2"
+version: "0.2.3"
 ignoreFlags: false
 description: |-
   Render value-file as a template and use it.
