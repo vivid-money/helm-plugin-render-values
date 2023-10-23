@@ -3,6 +3,7 @@ package render
 import (
 	"os"
 	"path/filepath"
+	// "fmt"
 )
 
 // Read the file.
@@ -24,6 +25,9 @@ func mergeKeys(left, right Values) Values {
 				left[key] = rightVal
 			}
 		} else {
+			if left == nil {
+				left = make(Values)
+			}
 			left[key] = rightVal
 		}
 	}

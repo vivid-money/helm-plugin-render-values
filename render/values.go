@@ -100,11 +100,12 @@ func (vr *ValuesRenderer) ReadValues() error {
 	vals := make(Values)
 
 	for _, file := range vr.files.ImportValues {
+		fmt.Println(file)
 		var rawFile []byte
 		var data Values
 
 		if strings.Contains(file, "*") {
-			println("Read files with mask")
+			println("Read glob files")
 			data = ParseYamlGlogFile(file)
 		} else {
 			rawFile = readFile(file)
@@ -123,7 +124,6 @@ func (vr *ValuesRenderer) ReadValues() error {
 		vals = Values{}
 	}
 	vr.values = make(Values)
-
 	vr.Debuging("DEBUG: total values: %#v\n", vals)
 	vr.values["Values"] = vals
 	return nil
@@ -138,7 +138,7 @@ func ParseYamlGlogFile(pattern string) Values {
 		errLog.Fatalf("ERROR: wrong glob: \"%s\"; stack:\"%v\"", pattern, err)
 	}
 	for _, file := range matches {
-
+        fmt.Println(file)
 		dir := strings.Split(filepath.Dir(file), "/")
 		fileValue := make(Values)
 
@@ -147,7 +147,7 @@ func ParseYamlGlogFile(pattern string) Values {
 		if err != nil {
 			errLog.Fatalf("ERROR: ReadValues: Can't parse file: \"%s\"; stack:\"%v\"", file, err)
 		}
-		mergeKeys(data, DirrectoryMapping(dir, fileValue))
+		data = mergeKeys(data, DirrectoryMapping(dir, fileValue))
 	}
 	return data
 }
