@@ -1,0 +1,2 @@
+name: second-service2
+replicas: 2

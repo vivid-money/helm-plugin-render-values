@@ -1,0 +1,12 @@
+importValuesFrom: 
+- self
+- testglob/*/values.yaml
+
+global:
+  env: test
+
+{{ range $name, $app := .Values.testglob }}
+"{{ $name }}":
+  name: {{ $app.name }}
+  replicas: {{ $app.replicas }}
+{{ end}}
