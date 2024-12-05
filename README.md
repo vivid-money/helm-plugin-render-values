@@ -64,6 +64,9 @@ hostname: service-{{.Value.env}}.domain.com
 ```
 ## Notes
 
+v0.2.4
+- update go to 1.23 and packages
+
 v0.2.3
 - update go to 1.20
 - add test for glob import files
