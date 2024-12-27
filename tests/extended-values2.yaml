@@ -1,4 +1,4 @@
-myapp1:
+myapp2:
   clusterExt: {{ .Values.clusterName }}
   controllerExt:
     autoscaling:
