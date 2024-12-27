@@ -79,10 +79,15 @@ func (vr *ValuesRenderer) GetFiles() error {
 		dmsgs = append(dmsgs, "importValuesFiles: there is no import values. Selfile will been used\n")
 	}
 	if len(extraFiles.ExtendRender) > 0 {
-		for i, renderFilername := range extraFiles.ExtendRender {
-			extraFiles.ExtendRender[i] = absolutePath(vr.filename, renderFilername)
-			dmsgs = append(dmsgs, "extendRenderWith: extrafile "+renderFilername+" will been rendred\n")
+		var renderFiles []string
+		for _, renderFilename := range extraFiles.ExtendRender {
+			matches, err := filepath.Glob(absolutePath(vr.filename, renderFilename))
+			if err != nil {
+				return fmt.Errorf("invalid glob pattern: %s, error: %v", renderFilename, err)
+			}
+			renderFiles = append(renderFiles, matches...)
 		}
+		extraFiles.ExtendRender = renderFiles
 	} else {
 		dmsgs = append(dmsgs, "extendRenderWith: there is no extended files for render\n")
 	}
