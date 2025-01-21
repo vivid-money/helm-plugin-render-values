@@ -1,7 +1,6 @@
-importValuesFrom: 
+importValuesFrom:
 - self
-- base-values1.yaml
-- base-values2.yaml
+- base-*.yaml
 
 extendRenderWith:
 - extended-*.yaml
