@@ -110,7 +110,6 @@ func (vr *ValuesRenderer) ReadValues() error {
 		var data Values
 
 		if strings.Contains(file, "*") {
-			println("Read glob files")
 			data = ParseYamlGlogFile(file)
 		} else {
 			rawFile = readFile(file)
@@ -189,7 +188,6 @@ func (vr *ValuesRenderer) RenderTemplate() error {
 		return fmt.Errorf("can't marshal yaml: \"%#v\"; stack:\"%v\"", valuesResult, err)
 	}
 
-	fmt.Println(string(renderedValues))
 	return nil
 
 }
