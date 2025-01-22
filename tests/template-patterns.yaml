@@ -1,6 +1,17 @@
-myapp1:
-  clusterExt: {{ .Values.clusterName }}
-  controllerExt:
+importValuesFrom:
+- self
+- base-*.yaml
+
+extendRenderWith:
+- extended-*.yaml
+
+default: from_this
+testint: 1
+template: '{\{ template $expr }}'
+myapp0:
+  cluster: {{ .Values.clusterName }}
+  enabled: {{ .Values.enabled }}
+  controller:
     autoscaling:
       enabled: true
       minReplicas: {{ .Values.defaults.minReplicas }}
@@ -9,4 +20,3 @@ myapp1:
       {{- end }}
 
     resources: {{ toYaml .Values.defaults.resources | nindent 6 }}
----

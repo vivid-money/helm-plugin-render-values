@@ -39,8 +39,10 @@ func DirrectoryMapping(dir []string, val Values) Values {
 	data := make(Values)
 	if len(dir) > 1 {
 		data[dir[0]] = DirrectoryMapping(dir[1:], val)
-	} else {
+	} else if dir[0] != "." {
 		data[dir[0]] = val
+	} else {
+		data = val
 	}
 	return data
 }

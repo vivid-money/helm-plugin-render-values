@@ -23,6 +23,11 @@ func TestRunRender(t *testing.T) {
 		valuesRender.Run("test-glob-values.yaml", "")
 	})
 
+	t.Run("template-patterns.yaml", func(t *testing.T) {
+		valuesRender := new(render.ValuesRenderer)
+		valuesRender.Run("template-patterns.yaml", "")
+	})
+
 	// t.Run("extended-values1.yaml", func(t *testing.T) {
 	// 	valuesRender := new(render.ValuesRenderer)
 	// 	valuesRender.Run("extended-values1.yaml", "")
