@@ -9,7 +9,7 @@ Feel free to explore the capabilities of this plugin and enjoy a more streamline
 ## Install
 Use helm CLI to install this plugin:
 ```
-$ helm plugin install https://github.com/vivid-money/helm-plugin-render-values --version 0.2.3
+$ helm plugin install https://github.com/vivid-money/helm-plugin-render-values --version 0.2.6
 ```
 
 ## Usage
@@ -63,6 +63,12 @@ namespace: release-{{.Value.env}}
 hostname: service-{{.Value.env}}.domain.com
 ```
 ## Notes
+
+v0.2.6
+- update go packages
+
+v0.2.5
+- Adds support for Glob Patterns in extendRenderWith
 
 v0.2.4
 - update go to 1.23 and packages
