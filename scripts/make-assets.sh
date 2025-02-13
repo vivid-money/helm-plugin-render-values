@@ -1,7 +1,7 @@
 #!/bin/bash
 # set -x
 
-VERSION="0.2.6"
+VERSION="0.2.7"
 mkdir -p assets
 
 OS_LIST="darwin/arm64
