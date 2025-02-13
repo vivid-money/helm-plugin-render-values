@@ -64,6 +64,10 @@ hostname: service-{{.Value.env}}.domain.com
 ```
 ## Notes
 
+v0.2.7
+- fix render output
+
+
 v0.2.6
 - update go packages
 
