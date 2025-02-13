@@ -187,7 +187,7 @@ func (vr *ValuesRenderer) RenderTemplate() error {
 	if err != nil {
 		return fmt.Errorf("can't marshal yaml: \"%#v\"; stack:\"%v\"", valuesResult, err)
 	}
-
+	fmt.Println(string(renderedValues))
 	return nil
 
 }
